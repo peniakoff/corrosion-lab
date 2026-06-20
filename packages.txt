@@ -1,2 +1,0 @@
-# Streamlit Community Cloud / HuggingFace Spaces
-# Main entry: streamlit run app.py
