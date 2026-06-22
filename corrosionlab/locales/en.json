@@ -1,0 +1,200 @@
+{
+  "locale_names": {
+    "pl": "Polski",
+    "en": "English"
+  },
+  "page": {
+    "caption": "High-temperature corrosion kinetics analyzer — FeCrAl / sol-gel coatings"
+  },
+  "sidebar": {
+    "language": "Language",
+    "config": "Configuration",
+    "control_column": "Reference column (uncoated alloy)",
+    "samples": "Samples to analyze",
+    "phys_constants": "Physicochemical constants",
+    "ref_mass": "Reference mass [g]",
+    "ref_area": "Reference surface area [cm²]",
+    "upload_csv": "Upload CSV file",
+    "demo_data": "Using demo data (Table 9.1 from the Master's thesis)."
+  },
+  "tabs": {
+    "dashboard": "Dashboard",
+    "kinetics": "Kinetic Analysis",
+    "spallation": "Spallation Alert",
+    "extrapolation": "Extrapolation",
+    "expert": "Coating Advisor"
+  },
+  "dashboard": {
+    "theory_header": "Theory and input data",
+    "theory_body": "**Tammann's law** describes parabolic metal oxidation kinetics: \\(x^2 = k \\cdot t\\),\nwhere \\(x\\) is e.g. mass gain or scale thickness. CorrosionLab automates\ncalculations from equations (9.1)–(9.4) of the Master's thesis:\n\n- **9.1** — relative mass change Δm/m₀ [%]\n- **9.2** — protective effectiveness Sₖ vs. uncoated alloy\n- **9.3** — scale thickness h [μm]\n- **9.4** — parabolic rate constant kₚ",
+    "download_template": "Download template.csv",
+    "data_preview": "Data preview"
+  },
+  "analysis": {
+    "results_header": "Calculation results",
+    "table_93": "**Table 9.3 — Δm/m₀ [%]**",
+    "table_94": "**Table 9.4 — Sₖ [%]**",
+    "table_95": "**Table 9.5 — scale thickness h [μm]**",
+    "table_96": "**Table 9.6 — parabolic rate constant kₚ**",
+    "export_header": "Export results",
+    "export_csv": "Export CSV (all tables)",
+    "export_svg": "Export chart SVG",
+    "export_pdf": "Export chart PDF",
+    "export_report_pdf": "Export PDF report",
+    "svg_unavailable": "SVG unavailable: {error}",
+    "pdf_unavailable": "PDF unavailable: {error}",
+    "report_unavailable": "PDF report unavailable: {error}",
+    "report_title": "CorrosionLab — Analysis report",
+    "report_samples": "Samples: {samples}",
+    "report_control": "Reference column: {control}",
+    "report_alerts": "Spallation alerts: {count}",
+    "report_section_mass": "Delta m/m0 [%]",
+    "report_section_sk": "Protective effectiveness Sk [%]"
+  },
+  "spallation": {
+    "header": "Scale spallation detector",
+    "description": "The algorithm analyzes the first mass difference between consecutive cycles. A negative mass gain indicates potential spallation (e.g. TM4B, TM5A @ 96 h).",
+    "no_alerts": "No spallation detected in selected samples.",
+    "alerts_found": "Detected {count} potential spallation points."
+  },
+  "extrapolation": {
+    "header": "Simulator and extrapolation",
+    "no_samples": "Select samples to analyze in the sidebar.",
+    "sample": "Sample",
+    "model": "Kinetic model",
+    "horizon": "Extrapolation horizon [h]",
+    "r_squared": "Fit R²",
+    "prediction": "**Prediction @ {hours} h:** Δm/m₀ ≈ {value:.2f}%",
+    "models": {
+      "linear": "Linear (y = a·t)",
+      "parabolic": "Parabolic (y = a·√t)",
+      "paralinear": "Paralinear (y = a·√t + b·t)"
+    }
+  },
+  "expert": {
+    "header": "Expert system — coating advisor",
+    "intro": "Recommendations based on conclusions from the Master's thesis (ch. 11, pp. 49–50).",
+    "priority_label": "Primary priority",
+    "layers_label": "Preferred layer count",
+    "budget_label": "Budget",
+    "avoid_spallation": "Avoid spallation-prone coatings",
+    "sample_code": "Sample code",
+    "expected_sk": "Expected Sₖ",
+    "layer_count": "Layer count",
+    "nanoparticle": "**Nanoparticle:** {nanoparticle}",
+    "rules_expander": "Rules applied",
+    "knowledge_base": "Knowledge base — all test samples",
+    "no_data": "no data",
+    "priority": {
+      "max_protection": "Maximum protection",
+      "min_spallation": "Minimum spallation",
+      "low_cost": "Low cost / simple application",
+      "multi_layer": "Multi-layer coating",
+      "balanced": "Balanced compromise"
+    },
+    "layers": {
+      "flexible": "Flexible (depends on priority)",
+      "single": "Single layer",
+      "five": "Five layers"
+    },
+    "budget": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "knowledge": {
+      "code": "Code",
+      "nanoparticle": "Nanoparticle",
+      "layers": "Layers",
+      "sk_120h": "Sₖ @ 120 h",
+      "spallation_risk": "Spallation risk",
+      "yes": "yes",
+      "no": "no"
+    },
+    "rec": {
+      "max_protection": {
+        "title": "Maximum protection — ZrO₂ (5 layers)",
+        "description": "A five-layer coating with yttria-stabilized ZrO₂ nanoparticles achieved ~100% protective effectiveness (conclusion C, sample TM4B).",
+        "rules": [
+          "C: SiO₂ matrix with ZrO₂ nanoparticles shows highest protective effectiveness."
+        ]
+      },
+      "min_spallation": {
+        "title": "Minimum spallation — avoid Y₂O₃, prefer ZrO₂",
+        "description": "Coatings with Y₂O₃ (TM5A/TM5B) show spallation and lower effectiveness. ZrO₂ in SiO₂ matrix (5 layers) gives the best scale stability.",
+        "rules": [
+          "F: Y₂O₃ increases spallation risk; ZrO₂ improves high-temperature resistance.",
+          "D: Five-layer coatings generally outperform single-layer variants."
+        ]
+      },
+      "low_cost": {
+        "title": "Low cost — single-layer SiO₂ (Aerosil 380)",
+        "description": "Single-layer SiO₂ with Aerosil 380 (TM2A) provides ~55% effectiveness with simpler application and lower cost.",
+        "rules": [
+          "B: Sol-gel coatings are easy to apply without costly equipment.",
+          "D: Single-layer coatings are cheaper but less effective."
+        ]
+      },
+      "multi_layer": {
+        "title": "Multi-layer protection — 5 layers ZrO₂",
+        "description": "Rule D: five-layer coatings provide better protection. TM4B (ZrO₂, 5 layers) — ~80–100% effectiveness.",
+        "rules": [
+          "D: Five-layer coatings provide better protection than single-layer SiO₂.",
+          "H: Reactive metal oxide nanoparticles reach 27–100% effectiveness."
+        ]
+      },
+      "single_layer": {
+        "title": "Single layer — SiO₂ Aerosil 380",
+        "description": "Compromise between cost and effectiveness: TM2A (~55% S_k).",
+        "rules": [
+          "H: Single-layer reactive oxides still outperform Al₂O₃/SiO₂ fillers."
+        ]
+      },
+      "balanced": {
+        "title": "Balanced recommendation — CeO₂/ZrO₂ (5 layers)",
+        "description": "Coating TM7B (CeO₂/ZrO₂, 5 layers) combines moderate effectiveness (~40%) with good scale morphology — a cost-protection compromise.",
+        "rules": [
+          "G: Nanoparticle type affects scale morphology and oxidation rate.",
+          "H: Reactive metal oxides (CeO₂/ZrO₂) reach moderate-to-high effectiveness."
+        ]
+      }
+    }
+  },
+  "plots": {
+    "mass_change": {
+      "title": "Relative mass change Δm/m₀",
+      "xaxis": "Oxidation time [h]",
+      "yaxis": "Δm/m₀ [%]",
+      "legend": "Sample"
+    },
+    "protective": {
+      "title": "Protective effectiveness S_k",
+      "xaxis": "Oxidation time [h]",
+      "yaxis": "S_k [%]",
+      "legend": "Sample"
+    },
+    "spallation": {
+      "title": "Scale spallation detection",
+      "marker": "Spallation {sample} @ {time:.0f}h"
+    },
+    "fit": {
+      "title": "Kinetic extrapolation — {sample} (R²={r2:.3f})",
+      "xaxis": "Oxidation time [h]",
+      "yaxis": "Δm/m₀ [%]",
+      "empirical": "Empirical data",
+      "fit_trace": "Fit ({model})",
+      "ci_95": "95% confidence interval",
+      "extrapolation": "Extrapolation"
+    }
+  },
+  "errors": {
+    "csv_empty": "The CSV file is empty.",
+    "missing_time_column": "Missing required column '{column}'. Found columns: {columns}",
+    "invalid_time_values": "Column '{column}' contains invalid values.",
+    "negative_time": "Oxidation time cannot be negative.",
+    "missing_control_column": "Missing reference column: {column}",
+    "missing_time_data": "No data for time {time_h} h.",
+    "unsupported_model": "Unsupported model: {model}",
+    "fitting_min_points": "At least two measurement points are required for fitting."
+  }
+}

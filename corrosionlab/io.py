@@ -6,14 +6,15 @@ from pathlib import Path
 
 import pandas as pd
 
-from corrosionlab.constants import DEFAULT_CONTROL_COLUMN, TIME_COLUMN
+from corrosionlab.constants import TIME_COLUMN
+from corrosionlab.i18n import LocalizedError
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 DEFAULT_DATA_PATH = DATA_DIR / "oxidation_data.csv"
 TEMPLATE_PATH = DATA_DIR / "template.csv"
 
 
-class DataValidationError(ValueError):
+class DataValidationError(LocalizedError):
     """Raised when uploaded CSV does not match the expected schema."""
 
 
@@ -31,12 +32,13 @@ def load_csv(source: Path | str | bytes) -> pd.DataFrame:
 def validate_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """Validate and normalize the oxidation data schema."""
     if df.empty:
-        raise DataValidationError("Plik CSV jest pusty.")
+        raise DataValidationError("csv_empty")
 
     if TIME_COLUMN not in df.columns:
         raise DataValidationError(
-            f"Brak wymaganej kolumny '{TIME_COLUMN}'. "
-            f"Znalezione kolumny: {', '.join(df.columns)}"
+            "missing_time_column",
+            column=TIME_COLUMN,
+            columns=", ".join(df.columns),
         )
 
     numeric_cols = [TIME_COLUMN, *get_sample_columns(df)]
@@ -45,10 +47,10 @@ def validate_dataframe(df: pd.DataFrame) -> pd.DataFrame:
             df[col] = pd.to_numeric(df[col], errors="coerce")
 
     if df[TIME_COLUMN].isna().any():
-        raise DataValidationError(f"Kolumna '{TIME_COLUMN}' zawiera nieprawidłowe wartości.")
+        raise DataValidationError("invalid_time_values", column=TIME_COLUMN)
 
     if (df[TIME_COLUMN] < 0).any():
-        raise DataValidationError("Czas utleniania nie może być ujemny.")
+        raise DataValidationError("negative_time")
 
     df = df.sort_values(TIME_COLUMN).reset_index(drop=True)
     return df

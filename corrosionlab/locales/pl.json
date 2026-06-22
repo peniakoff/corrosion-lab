@@ -1,0 +1,200 @@
+{
+  "locale_names": {
+    "pl": "Polski",
+    "en": "English"
+  },
+  "page": {
+    "caption": "Analizator kinetyki korozji wysokotemperaturowej — FeCrAl / powłoki zol-żel"
+  },
+  "sidebar": {
+    "language": "Język",
+    "config": "Konfiguracja",
+    "control_column": "Kolumna referencyjna (niepokryty stop)",
+    "samples": "Próbki do analizy",
+    "phys_constants": "Stałe fizykochemiczne",
+    "ref_mass": "Masa referencyjna [g]",
+    "ref_area": "Powierzchnia referencyjna [cm²]",
+    "upload_csv": "Wgraj plik CSV",
+    "demo_data": "Używane są dane demo (Tabela 9.1 z pracy magisterskiej)."
+  },
+  "tabs": {
+    "dashboard": "Dashboard",
+    "kinetics": "Analiza kinetyczna",
+    "spallation": "Alert odprysków",
+    "extrapolation": "Ekstrapolacja",
+    "expert": "Doradca powłok"
+  },
+  "dashboard": {
+    "theory_header": "Teoria i dane wejściowe",
+    "theory_body": "**Prawo Tammanna** opisuje paraboliczną kinetykę utleniania metali: \\(x^2 = k \\cdot t\\),\ngdzie \\(x\\) to np. przyrost masy lub grubość zgorzeliny. CorrosionLab automatyzuje\nobliczenia z równań (9.1)–(9.4) pracy magisterskiej:\n\n- **9.1** — względna zmiana masy Δm/m₀ [%]\n- **9.2** — skuteczność ochronna Sₖ względem niepokrytego stopu\n- **9.3** — grubość zgorzeliny h [μm]\n- **9.4** — stała paraboliczna kₚ",
+    "download_template": "Pobierz wzorcowy plik template.csv",
+    "data_preview": "Podgląd danych"
+  },
+  "analysis": {
+    "results_header": "Wyniki obliczeń",
+    "table_93": "**Tabela 9.3 — Δm/m₀ [%]**",
+    "table_94": "**Tabela 9.4 — Sₖ [%]**",
+    "table_95": "**Tabela 9.5 — grubość zgorzeliny h [μm]**",
+    "table_96": "**Tabela 9.6 — stała paraboliczna kₚ**",
+    "export_header": "Eksport wyników",
+    "export_csv": "Eksport CSV (wszystkie tabele)",
+    "export_svg": "Eksport wykresu SVG",
+    "export_pdf": "Eksport wykresu PDF",
+    "export_report_pdf": "Eksport raportu PDF",
+    "svg_unavailable": "SVG niedostępny: {error}",
+    "pdf_unavailable": "PDF niedostępny: {error}",
+    "report_unavailable": "Raport PDF niedostępny: {error}",
+    "report_title": "CorrosionLab — Raport analizy",
+    "report_samples": "Próbki: {samples}",
+    "report_control": "Kolumna referencyjna: {control}",
+    "report_alerts": "Liczba alertów odprysków: {count}",
+    "report_section_mass": "Delta m/m0 [%]",
+    "report_section_sk": "Skutecznosc Sk [%]"
+  },
+  "spallation": {
+    "header": "Detektor odprysków zgorzeliny",
+    "description": "Algorytm analizuje pierwszą różnicę masy między kolejnymi cyklami. Ujemny przyrost masy wskazuje potencjalny odprysk (np. TM4B, TM5A @ 96 h).",
+    "no_alerts": "Nie wykryto odprysków w wybranych próbkach.",
+    "alerts_found": "Wykryto {count} potencjalnych punktów odprysku."
+  },
+  "extrapolation": {
+    "header": "Symulator i ekstrapolacja",
+    "no_samples": "Wybierz próbki do analizy w panelu bocznym.",
+    "sample": "Próbka",
+    "model": "Model kinetyczny",
+    "horizon": "Horyzont ekstrapolacji [h]",
+    "r_squared": "R² dopasowania",
+    "prediction": "**Predykcja @ {hours} h:** Δm/m₀ ≈ {value:.2f}%",
+    "models": {
+      "linear": "Liniowy (y = a·t)",
+      "parabolic": "Paraboliczny (y = a·√t)",
+      "paralinear": "Paraliniowy (y = a·√t + b·t)"
+    }
+  },
+  "expert": {
+    "header": "System ekspercki — doradca powłok",
+    "intro": "Rekomendacje oparte na wnioskach z pracy magisterskiej (rozdz. 11, str. 49–50).",
+    "priority_label": "Priorytet główny",
+    "layers_label": "Preferowana liczba warstw",
+    "budget_label": "Budżet",
+    "avoid_spallation": "Unikaj powłok podatnych na odpryski",
+    "sample_code": "Kod próbki",
+    "expected_sk": "Oczekiwane Sₖ",
+    "layer_count": "Liczba warstw",
+    "nanoparticle": "**Nanonapełniacz:** {nanoparticle}",
+    "rules_expander": "Zastosowane reguły",
+    "knowledge_base": "Baza wiedzy — wszystkie próbki badawcze",
+    "no_data": "brak danych",
+    "priority": {
+      "max_protection": "Maksymalna ochrona",
+      "min_spallation": "Minimalny odprysk",
+      "low_cost": "Niska cena / prosta aplikacja",
+      "multi_layer": "Powłoka wielowarstwowa",
+      "balanced": "Kompromis (zbalansowany)"
+    },
+    "layers": {
+      "flexible": "Elastycznie (zależnie od priorytetu)",
+      "single": "Jedna warstwa",
+      "five": "Pięć warstw"
+    },
+    "budget": {
+      "low": "Niski",
+      "medium": "Średni",
+      "high": "Wysoki"
+    },
+    "knowledge": {
+      "code": "Kod",
+      "nanoparticle": "Nanonapełniacz",
+      "layers": "Warstwy",
+      "sk_120h": "Sₖ @ 120 h",
+      "spallation_risk": "Ryzyko odprysku",
+      "yes": "tak",
+      "no": "nie"
+    },
+    "rec": {
+      "max_protection": {
+        "title": "Maksymalna ochrona — ZrO₂ (5 warstw)",
+        "description": "Pięciowarstwowa powłoka z nanocząstkami ZrO₂ stabilizowanymi itrem wykazała skuteczność ochronną ~100% (wniosek C, próbka TM4B).",
+        "rules": [
+          "C: Matryca SiO₂ z nanocząstkami ZrO₂ wykazuje najwyższą skuteczność ochronną."
+        ]
+      },
+      "min_spallation": {
+        "title": "Minimalny odprysk — unikaj Y₂O₃, preferuj ZrO₂",
+        "description": "Powłoki z Y₂O₃ (TM5A/TM5B) wykazują odpryski i niższą skuteczność. ZrO₂ w matrycy SiO₂ (5 warstw) daje najlepszą stabilność zgorzeliny.",
+        "rules": [
+          "F: Y₂O₃ zwiększa ryzyko odprysków; ZrO₂ poprawia odporność wysokotemperaturową.",
+          "D: Powłoki pięciowarstwowe ogólnie przewyższają warianty jednowarstwowe."
+        ]
+      },
+      "low_cost": {
+        "title": "Niska cena — pojedyncza warstwa SiO₂ (Aerosil 380)",
+        "description": "Jednowarstwowa powłoka SiO₂ z Aerosil 380 (TM2A) zapewnia ~55% skuteczności przy prostszej aplikacji i niższych kosztach.",
+        "rules": [
+          "B: Powłoki zol-żel są łatwe w aplikacji bez kosztownego sprzętu.",
+          "D: Powłoki jednowarstwowe są tańsze, lecz mniej skuteczne."
+        ]
+      },
+      "multi_layer": {
+        "title": "Wielowarstwowa ochrona — 5 warstw ZrO₂",
+        "description": "Reguła D: pięciowarstwowe powłoki zapewniają lepszą ochronę. TM4B (ZrO₂, 5 warstw) — skuteczność ~80–100%.",
+        "rules": [
+          "D: Powłoki pięciowarstwowe zapewniają lepszą ochronę niż jednowarstwowe SiO₂.",
+          "H: Nanonapełniacze tlenków metali reaktywnych osiągają 27–100% skuteczności."
+        ]
+      },
+      "single_layer": {
+        "title": "Pojedyncza warstwa — SiO₂ Aerosil 380",
+        "description": "Kompromis między kosztem a skutecznością: TM2A (~55% S_k).",
+        "rules": [
+          "H: Jednowarstwowe tlenki reaktywne nadal przewyższają napełniacze Al₂O₃/SiO₂."
+        ]
+      },
+      "balanced": {
+        "title": "Zbalansowana rekomendacja — CeO₂/ZrO₂ (5 warstw)",
+        "description": "Powłoka TM7B (CeO₂/ZrO₂, 5 warstw) łączy umiarkowaną skuteczność (~40%) z dobrą morfologią zgorzeliny — kompromis między kosztem a ochroną.",
+        "rules": [
+          "G: Typ nanonapełniacza wpływa na morfologię zgorzeliny i szybkość utleniania.",
+          "H: Tlenki metali reaktywnych (CeO₂/ZrO₂) osiągają umiarkowaną do wysokiej skuteczności."
+        ]
+      }
+    }
+  },
+  "plots": {
+    "mass_change": {
+      "title": "Względna zmiana masy Δm/m₀",
+      "xaxis": "Czas utleniania [h]",
+      "yaxis": "Δm/m₀ [%]",
+      "legend": "Próbka"
+    },
+    "protective": {
+      "title": "Skuteczność ochronna S_k",
+      "xaxis": "Czas utleniania [h]",
+      "yaxis": "S_k [%]",
+      "legend": "Próbka"
+    },
+    "spallation": {
+      "title": "Detekcja odprysków zgorzeliny",
+      "marker": "Odprysk {sample} @ {time:.0f}h"
+    },
+    "fit": {
+      "title": "Ekstrapolacja kinetyki — {sample} (R²={r2:.3f})",
+      "xaxis": "Czas utleniania [h]",
+      "yaxis": "Δm/m₀ [%]",
+      "empirical": "Dane empiryczne",
+      "fit_trace": "Dopasowanie ({model})",
+      "ci_95": "Przedział ufności 95%",
+      "extrapolation": "Ekstrapolacja"
+    }
+  },
+  "errors": {
+    "csv_empty": "Plik CSV jest pusty.",
+    "missing_time_column": "Brak wymaganej kolumny '{column}'. Znalezione kolumny: {columns}",
+    "invalid_time_values": "Kolumna '{column}' zawiera nieprawidłowe wartości.",
+    "negative_time": "Czas utleniania nie może być ujemny.",
+    "missing_control_column": "Brak kolumny referencyjnej: {column}",
+    "missing_time_data": "Brak danych dla czasu {time_h} h.",
+    "unsupported_model": "Nieobsługiwany model: {model}",
+    "fitting_min_points": "Potrzeba co najmniej dwóch punktów pomiarowych do dopasowania."
+  }
+}

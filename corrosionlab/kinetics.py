@@ -17,6 +17,7 @@ from corrosionlab.constants import (
     SECONDS_PER_HOUR,
     TIME_COLUMN,
 )
+from corrosionlab.i18n import LocalizedError
 
 
 @dataclass
@@ -87,7 +88,7 @@ def compute_protective_effectiveness(
 ) -> pd.DataFrame:
     """Equation 9.2 — protective effectiveness S_k [%]."""
     if config.control_column not in df.columns:
-        raise ValueError(f"Brak kolumny referencyjnej: {config.control_column}")
+        raise LocalizedError("missing_control_column", column=config.control_column)
 
     columns = _resolve_sample_columns(df, config)
     coated_columns = [c for c in columns if c != config.control_column]
@@ -191,7 +192,7 @@ def value_at_time(table: pd.DataFrame, sample: str, time_h: float) -> float:
     """Return a computed value for a sample at a given oxidation time."""
     row = table.loc[table[TIME_COLUMN] == time_h]
     if row.empty:
-        raise KeyError(f"Brak danych dla czasu {time_h} h.")
+        raise LocalizedError("missing_time_data", time_h=time_h)
     return float(row[sample].iloc[0])
 
 

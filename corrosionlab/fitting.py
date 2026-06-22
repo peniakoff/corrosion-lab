@@ -8,6 +8,7 @@ from typing import Literal
 import numpy as np
 import pandas as pd
 from scipy.optimize import curve_fit
+from corrosionlab.i18n import LocalizedError
 
 ModelType = Literal["linear", "parabolic", "paralinear"]
 
@@ -50,7 +51,7 @@ def _model_spec(model: ModelType) -> tuple:
         return _parabolic_model, [0.1]
     if model == "paralinear":
         return _paralinear_model, [0.1, 0.01]
-    raise ValueError(f"Nieobsługiwany model: {model}")
+    raise LocalizedError("unsupported_model", model=model)
 
 
 def _predict(model: ModelType, t: np.ndarray, params: np.ndarray) -> np.ndarray:
@@ -82,7 +83,7 @@ def fit_kinetic_model(
     y = y[mask]
 
     if len(t) < 2:
-        raise ValueError("Potrzeba co najmniej dwóch punktów pomiarowych do dopasowania.")
+        raise LocalizedError("fitting_min_points")
 
     func, p0 = _model_spec(model)
     params, pcov = curve_fit(func, t, y, p0=p0, maxfev=10_000)

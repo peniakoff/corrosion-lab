@@ -29,6 +29,14 @@ from corrosionlab.io import (
     load_default_data,
     load_template_bytes,
 )
+from corrosionlab.i18n import (
+    SUPPORTED_LOCALES,
+    LocalizedError,
+    detect_browser_locale,
+    format_error,
+    get_locale,
+    t,
+)
 from corrosionlab.kinetics import AnalysisConfig, analyze_all
 from corrosionlab.plots import (
     plot_fit_extrapolation,
@@ -42,7 +50,6 @@ from corrosionlab.spallation import detect_spallation_all
 @st.cache_data
 def cached_analyze(df_bytes: bytes, config_dict: dict) -> dict:
     """Cache analysis results for identical inputs."""
-    import pandas as pd
     from io import BytesIO
 
     df = load_csv(BytesIO(df_bytes))
@@ -56,13 +63,32 @@ def cached_analyze(df_bytes: bytes, config_dict: dict) -> dict:
     }
 
 
+def init_locale() -> None:
+    """Initialize locale from browser on first session load."""
+    if "locale" not in st.session_state:
+        st.session_state.locale = detect_browser_locale()
+
+
+def render_locale_selector() -> None:
+    """Render language selector in the sidebar."""
+    current = get_locale()
+    st.sidebar.selectbox(
+        t("sidebar.language"),
+        options=SUPPORTED_LOCALES,
+        format_func=lambda loc: t(f"locale_names.{loc}", locale=loc),
+        index=SUPPORTED_LOCALES.index(current),
+        key="locale",
+    )
+
+
 def render_sidebar(df) -> AnalysisConfig:
     """Render sidebar controls and return analysis configuration."""
-    st.sidebar.header("Konfiguracja")
+    locale = get_locale()
+    st.sidebar.header(t("sidebar.config", locale=locale))
 
     sample_cols = get_sample_columns(df)
     control_col = st.sidebar.selectbox(
-        "Kolumna referencyjna (niepokryty stop)",
+        t("sidebar.control_column", locale=locale),
         options=sample_cols,
         index=sample_cols.index(DEFAULT_CONTROL_COLUMN)
         if DEFAULT_CONTROL_COLUMN in sample_cols
@@ -71,17 +97,25 @@ def render_sidebar(df) -> AnalysisConfig:
 
     available = [c for c in sample_cols if c != control_col]
     selected = st.sidebar.multiselect(
-        "Próbki do analizy",
+        t("sidebar.samples", locale=locale),
         options=available,
         default=available,
     )
 
-    st.sidebar.subheader("Stałe fizykochemiczne")
+    st.sidebar.subheader(t("sidebar.phys_constants", locale=locale))
     m_al2o3 = st.sidebar.number_input("M_Al₂O₃ [g/mol]", value=M_AL2O3, format="%.2f")
     m_o = st.sidebar.number_input("M_O [g/mol]", value=M_O, format="%.2f")
     rho = st.sidebar.number_input("ρ_Al₂O₃ [g/cm³]", value=RHO_AL2O3, format="%.2f")
-    m_ref = st.sidebar.number_input("Masa referencyjna [g]", value=M_REF, format="%.5f")
-    s_ref = st.sidebar.number_input("Powierzchnia referencyjna [cm²]", value=S_REF, format="%.1f")
+    m_ref = st.sidebar.number_input(
+        t("sidebar.ref_mass", locale=locale),
+        value=M_REF,
+        format="%.5f",
+    )
+    s_ref = st.sidebar.number_input(
+        t("sidebar.ref_area", locale=locale),
+        value=S_REF,
+        format="%.1f",
+    )
 
     all_samples = [control_col, *selected]
     return AnalysisConfig(
@@ -103,21 +137,25 @@ def main() -> None:
         initial_sidebar_state="expanded",
     )
 
-    st.title("CorrosionLab")
-    st.caption("Analizator kinetyki korozji wysokotemperaturowej — FeCrAl / powłoki zol-żel")
+    init_locale()
+    render_locale_selector()
+    locale = get_locale()
 
-    uploaded = st.sidebar.file_uploader("Wgraj plik CSV", type=["csv"])
+    st.title("CorrosionLab")
+    st.caption(t("page.caption", locale=locale))
+
+    uploaded = st.sidebar.file_uploader(t("sidebar.upload_csv", locale=locale), type=["csv"])
     if uploaded is not None:
         try:
             raw_df = load_csv(uploaded.getvalue())
             df_source = uploaded.getvalue()
         except DataValidationError as exc:
-            st.error(str(exc))
+            st.error(format_error(exc, locale=locale))
             st.stop()
     else:
         raw_df = load_default_data()
         df_source = raw_df.to_csv(index=False).encode("utf-8")
-        st.sidebar.info("Używane są dane demo (Tabela 9.1 z pracy magisterskiej).")
+        st.sidebar.info(t("sidebar.demo_data", locale=locale))
 
     config = render_sidebar(raw_df)
     payload = cached_analyze(df_source, config.__dict__)
@@ -129,67 +167,64 @@ def main() -> None:
 
     tab_dash, tab_analysis, tab_spall, tab_fit, tab_expert = st.tabs(
         [
-            "Dashboard",
-            "Analiza kinetyczna",
-            "Spallation Alert",
-            "Ekstrapolacja",
-            "Doradca powłok",
+            t("tabs.dashboard", locale=locale),
+            t("tabs.kinetics", locale=locale),
+            t("tabs.spallation", locale=locale),
+            t("tabs.extrapolation", locale=locale),
+            t("tabs.expert", locale=locale),
         ]
     )
 
     with tab_dash:
-        st.subheader("Teoria i dane wejściowe")
-        st.markdown(
-            """
-            **Prawo Tammanna** opisuje paraboliczną kinetykę utleniania metali: \\(x^2 = k \\cdot t\\),
-            gdzie \\(x\\) to np. przyrost masy lub grubość zgorzeliny. CorrosionLab automatyzuje
-            obliczenia z równań (9.1)–(9.4) pracy magisterskiej:
-
-            - **9.1** — względna zmiana masy Δm/m₀ [%]
-            - **9.2** — skuteczność ochronna Sₖ względem niepokrytego stopu
-            - **9.3** — grubość zgorzeliny h [μm]
-            - **9.4** — stała paraboliczna kₚ
-            """
-        )
+        st.subheader(t("dashboard.theory_header", locale=locale))
+        st.markdown(t("dashboard.theory_body", locale=locale))
         st.download_button(
-            "Pobierz wzorcowy plik template.csv",
+            t("dashboard.download_template", locale=locale),
             data=load_template_bytes(),
             file_name="template.csv",
             mime="text/csv",
         )
-        st.subheader("Podgląd danych")
-        st.dataframe(df, use_container_width=True)
+        st.subheader(t("dashboard.data_preview", locale=locale))
+        st.dataframe(df, width="stretch")
 
     with tab_analysis:
-        st.subheader("Wyniki obliczeń")
+        st.subheader(t("analysis.results_header", locale=locale))
         col1, col2 = st.columns(2)
         with col1:
-            st.markdown("**Tabela 9.3 — Δm/m₀ [%]**")
-            st.dataframe(result.mass_change_pct, use_container_width=True)
+            st.markdown(t("analysis.table_93", locale=locale))
+            st.dataframe(result.mass_change_pct, width="stretch")
         with col2:
-            st.markdown("**Tabela 9.4 — Sₖ [%]**")
-            st.dataframe(result.protective_effectiveness_pct, use_container_width=True)
+            st.markdown(t("analysis.table_94", locale=locale))
+            st.dataframe(result.protective_effectiveness_pct, width="stretch")
 
         col3, col4 = st.columns(2)
         with col3:
-            st.markdown("**Tabela 9.5 — grubość zgorzeliny h [μm]**")
-            st.dataframe(result.scale_thickness_um, use_container_width=True)
+            st.markdown(t("analysis.table_95", locale=locale))
+            st.dataframe(result.scale_thickness_um, width="stretch")
         with col4:
-            st.markdown("**Tabela 9.6 — stała paraboliczna kₚ**")
-            st.dataframe(result.parabolic_rate, use_container_width=True)
+            st.markdown(t("analysis.table_96", locale=locale))
+            st.dataframe(result.parabolic_rate, width="stretch")
 
-        fig_mass = plot_mass_change(result.mass_change_pct, coated_samples + [config.control_column])
-        st.plotly_chart(fig_mass, use_container_width=True)
+        fig_mass = plot_mass_change(
+            result.mass_change_pct,
+            coated_samples + [config.control_column],
+            locale=locale,
+        )
+        st.plotly_chart(fig_mass, width="stretch")
 
         if coated_samples:
-            fig_sk = plot_protective_effectiveness(result.protective_effectiveness_pct, coated_samples)
-            st.plotly_chart(fig_sk, use_container_width=True)
+            fig_sk = plot_protective_effectiveness(
+                result.protective_effectiveness_pct,
+                coated_samples,
+                locale=locale,
+            )
+            st.plotly_chart(fig_sk, width="stretch")
 
-        st.subheader("Eksport wyników")
+        st.subheader(t("analysis.export_header", locale=locale))
         exp_col1, exp_col2, exp_col3 = st.columns(3)
         with exp_col1:
             st.download_button(
-                "Eksport CSV (wszystkie tabele)",
+                t("analysis.export_csv", locale=locale),
                 data=combine_results_csv(
                     result.mass_change_pct,
                     result.protective_effectiveness_pct,
@@ -202,83 +237,94 @@ def main() -> None:
         with exp_col2:
             try:
                 st.download_button(
-                    "Eksport wykresu SVG",
+                    t("analysis.export_svg", locale=locale),
                     data=figure_to_svg_bytes(fig_mass),
                     file_name="kinetics_mass_change.svg",
                     mime="image/svg+xml",
                 )
             except Exception as exc:
-                st.caption(f"SVG niedostępny: {exc}")
+                st.caption(t("analysis.svg_unavailable", locale=locale, error=exc))
         with exp_col3:
             try:
                 st.download_button(
-                    "Eksport wykresu PDF",
+                    t("analysis.export_pdf", locale=locale),
                     data=figure_to_pdf_bytes(fig_mass),
                     file_name="kinetics_mass_change.pdf",
                     mime="application/pdf",
                 )
             except Exception as exc:
-                st.caption(f"PDF niedostępny: {exc}")
+                st.caption(t("analysis.pdf_unavailable", locale=locale, error=exc))
 
         try:
             report_pdf = build_text_report_pdf(
-                "CorrosionLab — Raport analizy",
+                t("analysis.report_title", locale=locale),
                 [
-                    f"Próbki: {', '.join(config.sample_columns or [])}",
-                    f"Kolumna referencyjna: {config.control_column}",
-                    f"Liczba alertów odprysków: {len(alerts)}",
+                    t(
+                        "analysis.report_samples",
+                        locale=locale,
+                        samples=", ".join(config.sample_columns or []),
+                    ),
+                    t(
+                        "analysis.report_control",
+                        locale=locale,
+                        control=config.control_column,
+                    ),
+                    t(
+                        "analysis.report_alerts",
+                        locale=locale,
+                        count=len(alerts),
+                    ),
                 ],
                 {
-                    "Delta m/m0 [%]": result.mass_change_pct,
-                    "Skutecznosc Sk [%]": result.protective_effectiveness_pct,
+                    t("analysis.report_section_mass", locale=locale): result.mass_change_pct,
+                    t("analysis.report_section_sk", locale=locale): result.protective_effectiveness_pct,
                 },
             )
             st.download_button(
-                "Eksport raportu PDF",
+                t("analysis.export_report_pdf", locale=locale),
                 data=report_pdf,
                 file_name="corrosionlab_report.pdf",
                 mime="application/pdf",
             )
         except Exception as exc:
-            st.caption(f"Raport PDF niedostępny: {exc}")
+            st.caption(t("analysis.report_unavailable", locale=locale, error=exc))
 
     with tab_spall:
-        st.subheader("Detektor odprysków zgorzeliny")
-        st.markdown(
-            "Algorytm analizuje pierwszą różnicę masy między kolejnymi cyklami. "
-            "Ujemny przyrost masy wskazuje potencjalny odprysk (np. TM4B, TM5A @ 96 h)."
-        )
+        st.subheader(t("spallation.header", locale=locale))
+        st.markdown(t("spallation.description", locale=locale))
         if alerts.empty:
-            st.success("Nie wykryto odprysków w wybranych próbkach.")
+            st.success(t("spallation.no_alerts", locale=locale))
         else:
-            st.warning(f"Wykryto {len(alerts)} potencjalnych punktów odprysku.")
-            st.dataframe(alerts, use_container_width=True)
+            st.warning(
+                t("spallation.alerts_found", locale=locale, count=len(alerts))
+            )
+            st.dataframe(alerts, width="stretch")
 
         fig_spall = plot_spallation(
             result.mass_change_pct,
             alerts,
             coated_samples + [config.control_column],
+            locale=locale,
         )
-        st.plotly_chart(fig_spall, use_container_width=True)
+        st.plotly_chart(fig_spall, width="stretch")
 
     with tab_fit:
-        st.subheader("Symulator i ekstrapolacja")
+        st.subheader(t("extrapolation.header", locale=locale))
         if not coated_samples:
-            st.info("Wybierz próbki do analizy w panelu bocznym.")
+            st.info(t("extrapolation.no_samples", locale=locale))
         else:
-            fit_sample = st.selectbox("Próbka", options=coated_samples)
+            fit_sample = st.selectbox(
+                t("extrapolation.sample", locale=locale),
+                options=coated_samples,
+            )
             fit_model = st.selectbox(
-                "Model kinetyczny",
+                t("extrapolation.model", locale=locale),
                 options=["parabolic", "linear", "paralinear"],
-                format_func=lambda x: {
-                    "linear": "Liniowy (y = a·t)",
-                    "parabolic": "Paraboliczny (y = a·√t)",
-                    "paralinear": "Paraliniowy (y = a·√t + b·t)",
-                }[x],
+                format_func=lambda x: t(f"extrapolation.models.{x}", locale=locale),
             )
             max_time = float(df[TIME_COLUMN].max())
             extrap_hours = st.slider(
-                "Horyzont ekstrapolacji [h]",
+                t("extrapolation.horizon", locale=locale),
                 min_value=int(max_time + 12),
                 max_value=int(max_time + 240),
                 value=int(max_time + 120),
@@ -296,51 +342,48 @@ def main() -> None:
                     model=fit_model,
                     extrapolation_hours=[extrap_hours],
                 )
-                st.metric("R² dopasowania", f"{fit_result.r_squared:.4f}")
-                fig_fit = plot_fit_extrapolation(fit_result, fit_sample)
-                st.plotly_chart(fig_fit, use_container_width=True)
-                st.markdown(
-                    f"**Predykcja @ {extrap_hours} h:** "
-                    f"Δm/m₀ ≈ {float(fit_result.extrapolation[-1]):.2f}%"
-                    if len(fit_result.extrapolation)
-                    else ""
+                st.metric(
+                    t("extrapolation.r_squared", locale=locale),
+                    f"{fit_result.r_squared:.4f}",
                 )
-            except ValueError as exc:
-                st.error(str(exc))
+                fig_fit = plot_fit_extrapolation(fit_result, fit_sample, locale=locale)
+                st.plotly_chart(fig_fit, width="stretch")
+                if len(fit_result.extrapolation):
+                    st.markdown(
+                        t(
+                            "extrapolation.prediction",
+                            locale=locale,
+                            hours=extrap_hours,
+                            value=float(fit_result.extrapolation[-1]),
+                        )
+                    )
+            except LocalizedError as exc:
+                st.error(format_error(exc, locale=locale))
 
     with tab_expert:
-        st.subheader("System ekspercki — doradca powłok")
-        st.markdown(
-            "Rekomendacje oparte na wnioskach z pracy magisterskiej (rozdz. 11, str. 49–50)."
-        )
+        st.subheader(t("expert.header", locale=locale))
+        st.markdown(t("expert.intro", locale=locale))
 
         priority = st.radio(
-            "Priorytet główny",
+            t("expert.priority_label", locale=locale),
             options=["max_protection", "min_spallation", "low_cost", "multi_layer", "balanced"],
-            format_func=lambda x: {
-                "max_protection": "Maksymalna ochrona",
-                "min_spallation": "Minimalny odprysk",
-                "low_cost": "Niska cena / prosta aplikacja",
-                "multi_layer": "Powłoka wielowarstwowa",
-                "balanced": "Kompromis (zbalansowany)",
-            }[x],
+            format_func=lambda x: t(f"expert.priority.{x}", locale=locale),
             horizontal=True,
         )
         layer_pref = st.selectbox(
-            "Preferowana liczba warstw",
+            t("expert.layers_label", locale=locale),
             options=["flexible", "single", "five"],
-            format_func=lambda x: {
-                "flexible": "Elastycznie (zależnie od priorytetu)",
-                "single": "Jedna warstwa",
-                "five": "Pięć warstw",
-            }[x],
+            format_func=lambda x: t(f"expert.layers.{x}", locale=locale),
         )
         budget = st.selectbox(
-            "Budżet",
+            t("expert.budget_label", locale=locale),
             options=["low", "medium", "high"],
-            format_func=lambda x: {"low": "Niski", "medium": "Średni", "high": "Wysoki"}[x],
+            format_func=lambda x: t(f"expert.budget.{x}", locale=locale),
         )
-        avoid_spallation = st.checkbox("Unikaj powłok podatnych na odpryski", value=True)
+        avoid_spallation = st.checkbox(
+            t("expert.avoid_spallation", locale=locale),
+            value=True,
+        )
 
         prefs = UserPreferences(
             priority=priority,
@@ -348,32 +391,38 @@ def main() -> None:
             budget=budget,
             avoid_spallation=avoid_spallation,
         )
-        rec = recommend_coating(prefs)
+        rec = recommend_coating(prefs, locale=locale)
 
         st.success(f"**{rec.title}**")
         st.markdown(rec.description)
         meta_col1, meta_col2, meta_col3 = st.columns(3)
-        meta_col1.metric("Kod próbki", rec.sample_code)
-        meta_col2.metric("Oczekiwane Sₖ", rec.expected_sk_pct)
-        meta_col3.metric("Liczba warstw", rec.layers)
+        meta_col1.metric(t("expert.sample_code", locale=locale), rec.sample_code)
+        meta_col2.metric(t("expert.expected_sk", locale=locale), rec.expected_sk_pct)
+        meta_col3.metric(t("expert.layer_count", locale=locale), rec.layers)
 
-        st.markdown(f"**Nanonapełniacz:** {rec.nanoparticle}")
-        with st.expander("Zastosowane reguły"):
+        st.markdown(
+            t("expert.nanoparticle", locale=locale, nanoparticle=rec.nanoparticle)
+        )
+        with st.expander(t("expert.rules_expander", locale=locale)):
             for rule in rec.rules_applied:
                 st.markdown(f"- {rule}")
 
-        st.subheader("Baza wiedzy — wszystkie próbki badawcze")
+        st.subheader(t("expert.knowledge_base", locale=locale))
         meta_rows = [
             {
-                "Kod": code,
-                "Nanonapełniacz": meta.nanoparticle,
-                "Warstwy": meta.layers,
-                "Sₖ @ 120 h": meta.sk_at_120h,
-                "Ryzyko odprysku": "tak" if meta.spallation_prone else "nie",
+                t("expert.knowledge.code", locale=locale): code,
+                t("expert.knowledge.nanoparticle", locale=locale): meta.nanoparticle,
+                t("expert.knowledge.layers", locale=locale): meta.layers,
+                t("expert.knowledge.sk_120h", locale=locale): meta.sk_at_120h,
+                t("expert.knowledge.spallation_risk", locale=locale): (
+                    t("expert.knowledge.yes", locale=locale)
+                    if meta.spallation_prone
+                    else t("expert.knowledge.no", locale=locale)
+                ),
             }
             for code, meta in SAMPLE_METADATA.items()
         ]
-        st.dataframe(meta_rows, use_container_width=True)
+        st.dataframe(meta_rows, width="stretch")
 
 
 if __name__ == "__main__":

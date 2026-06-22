@@ -24,6 +24,16 @@ The app serves as a modern, digital extension of a Master's Thesis defended in 2
 3. 📉 **Predictive Curve Fitting:** Uses non-linear regression to fit kinetic models (linear, parabolic) and extrapolates future coating behavior beyond the actual experimental timeframe.
 4. 🧠 **Coating Recommender System:** A rule-based expert system that recommends the optimal sol-gel coating composition (e.g., precursor type, dopant, number of layers) based on the user's specific environmental requirements.
 
+### Language / UI Localization
+
+The running app supports **Polish** and **English**:
+
+* On first load, the UI language is detected from your browser locale (`st.context.locale`).
+* Use the **Language** selector at the top of the sidebar to switch between Polski and English for the current session.
+* Translation catalogs live in `corrosionlab/locales/` (`pl.json`, `en.json`).
+
+Requires **Streamlit ≥ 1.37**.
+
 ### Tech Stack
 
 * **Language:** Python
@@ -91,6 +101,16 @@ Aplikacja powstała w 2026 roku jako cyfrowe rozwinięcie i ulepszenie analitycz
 2. ⚠️ **Detektor Odprysków:** Algorytm badający pochodną krzywej zmiany masy. Wykrywa nagłe spadki masy, flagując cykle, w których doszło do pękania i odpryskiwania zgorzeliny tlenkowej.
 3. 📉 **Symulator i Ekstrapolacja:** Wykorzystuje regresję nieliniową do dopasowania funkcji (liniowej/parabolicznej) do danych empirycznych i symuluje zachowanie próbek w przyszłości (wykresy predykcyjne).
 4. 🧠 **System Ekspercki:** „Doradca” powłokowy bazujący na regułach IF-THEN. Na podstawie wbudowanej wiedzy empirycznej rekomenduje optymalny napełniacz (np. tlenek cyrkonu) i liczbę warstw dla konkretnych zastosowań.
+
+### Język interfejsu
+
+Aplikacja obsługuje **polski** i **angielski**:
+
+* Przy pierwszym uruchomieniu język jest wykrywany z ustawień przeglądarki (`st.context.locale`).
+* Przełącznik **Język** na górze panelu bocznego pozwala wybrać Polski lub English na czas bieżącej sesji.
+* Tłumaczenia znajdują się w `corrosionlab/locales/` (`pl.json`, `en.json`).
+
+Wymagany jest **Streamlit ≥ 1.37**.
 
 ### Technologie
 

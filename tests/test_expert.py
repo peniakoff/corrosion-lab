@@ -31,3 +31,15 @@ def test_balanced_recommendation():
     rec = recommend_coating(UserPreferences(priority="balanced"))
     assert rec.sample_code == "TM7B"
     assert rec.rules_applied
+
+
+def test_max_protection_english_title():
+    rec = recommend_coating(UserPreferences(priority="max_protection"), locale="en")
+    assert rec.sample_code == "TM4B"
+    assert "Maximum protection" in rec.title
+
+
+def test_low_cost_english_title():
+    rec = recommend_coating(UserPreferences(priority="low_cost"), locale="en")
+    assert rec.sample_code == "TM2A"
+    assert "Low cost" in rec.title
