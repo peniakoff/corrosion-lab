@@ -6,6 +6,7 @@
 ![Streamlit](https://img.shields.io/badge/Streamlit-App-red)
 ![License: MIT](https://img.shields.io/badge/Code_License-MIT-green)
 ![License: CC BY 4.0](https://img.shields.io/badge/Data_License-CC_BY_4.0-lightgrey)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Streamlit-FF4B4B)](https://corrosion-lab.streamlit.app)
 
 ---
 
@@ -41,6 +42,12 @@ Requires **Streamlit ≥ 1.37**.
 * **Data Processing:** Pandas, NumPy
 * **Scientific Computing:** SciPy (`scipy.optimize.curve_fit`)
 * **Visualization:** Plotly
+
+### Live Demo
+
+You can try CorrosionLab without installing anything locally. The app is hosted on Streamlit Community Cloud:
+
+**[https://corrosion-lab.streamlit.app](https://corrosion-lab.streamlit.app)**
 
 ### Installation & Quick Start
 
@@ -119,6 +126,12 @@ Wymagany jest **Streamlit ≥ 1.37**.
 * **Przetwarzanie Danych:** Pandas, NumPy
 * **Obliczenia Naukowe:** SciPy (`scipy.optimize.curve_fit`)
 * **Wizualizacja:** Plotly
+
+### Podgląd aplikacji
+
+Aplikację można przetestować bez lokalnej instalacji. Wersja demonstracyjna jest dostępna na Streamlit Community Cloud:
+
+**[https://corrosion-lab.streamlit.app](https://corrosion-lab.streamlit.app)**
 
 ### Instalacja i Uruchomienie
 
