@@ -2,7 +2,7 @@
 
 [🇬🇧 English](#-english-version) | [🇵🇱 Polski](#-wersja-polska)
 
-![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
+![Python](https://img.shields.io/badge/Python-3.12%2B-blue)
 ![Streamlit](https://img.shields.io/badge/Streamlit-App-red)
 ![License: MIT](https://img.shields.io/badge/Code_License-MIT-green)
 ![License: CC BY 4.0](https://img.shields.io/badge/Data_License-CC_BY_4.0-lightgrey)
