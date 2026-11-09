@@ -5,4 +5,4 @@ plotly>=5.18
 streamlit>=1.37
 pytest>=7.0
 kaleido>=0.2
-fpdf2>=2.7
+fpdf2>=2.9.0
