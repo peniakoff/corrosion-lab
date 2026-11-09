@@ -2,7 +2,7 @@
 
 [🇬🇧 English](#-english-version) | [🇵🇱 Polski](#-wersja-polska)
 
-![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
+![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
 ![Streamlit](https://img.shields.io/badge/Streamlit-App-red)
 ![License: MIT](https://img.shields.io/badge/Code_License-MIT-green)
 ![License: CC BY 4.0](https://img.shields.io/badge/Data_License-CC_BY_4.0-lightgrey)
@@ -42,6 +42,7 @@ Requires **Streamlit ≥ 1.37**.
 * **Data Processing:** Pandas, NumPy
 * **Scientific Computing:** SciPy (`scipy.optimize.curve_fit`)
 * **Visualization:** Plotly
+* **Export:** fpdf2 (PDF), Kaleido (static SVG charts)
 
 ### Live Demo
 
@@ -54,8 +55,8 @@ You can try CorrosionLab without installing anything locally. The app is hosted 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/YourUsername/CorrosionLab.git
-   cd CorrosionLab
+   git clone https://github.com/peniakoff/corrosion-lab.git
+   cd corrosion-lab
    ```
 
 2. Create a virtual environment and install dependencies:
@@ -126,6 +127,7 @@ Wymagany jest **Streamlit ≥ 1.37**.
 * **Przetwarzanie Danych:** Pandas, NumPy
 * **Obliczenia Naukowe:** SciPy (`scipy.optimize.curve_fit`)
 * **Wizualizacja:** Plotly
+* **Eksport:** fpdf2 (PDF), Kaleido (statyczne wykresy SVG)
 
 ### Podgląd aplikacji
 
@@ -138,8 +140,8 @@ Aplikację można przetestować bez lokalnej instalacji. Wersja demonstracyjna j
 1. Sklonuj repozytorium:
 
    ```bash
-   git clone https://github.com/TwojUsername/CorrosionLab.git
-   cd CorrosionLab
+   git clone https://github.com/peniakoff/corrosion-lab.git
+   cd corrosion-lab
    ```
 
 2. Utwórz środowisko wirtualne i zainstaluj biblioteki:
